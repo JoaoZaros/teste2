@@ -1,12 +1,20 @@
 #include <iostream>
+#include <cstdlib> // Para usar system()
 #include <fstream>
 #include <vector>
 #include <string>
-#include <cstdlib>  // Para system()
 #include "Formulario.cpp"
+
 using namespace std;
 
+// Função para listar os formulários disponíveis
+void exibirFormularios() {
+    cout << "\nFormularios disponíveis:\n";
+    system("ls *.bin");
+    //cout << "\n";
+}
 
+// Função para salvar um formulário
 void salvarFormulario(Formulario* formulario) {
     ofstream outFile(formulario->getNomeFormulario() + ".bin", ios::binary);
     formulario->salvar(outFile);
@@ -14,10 +22,11 @@ void salvarFormulario(Formulario* formulario) {
     cout << "Formulario '" << formulario->getNomeFormulario() << "' salvo com sucesso.\n";
 }
 
+// Função para carregar um formulário
 Formulario* carregarFormulario(const string& nomeArquivo) {
     ifstream inFile(nomeArquivo + ".bin", ios::binary);
     if (!inFile) {
-        cout << "Arquivo não encontrado.\n";
+        cout << "Arquivo não encontrado. Digite um nome de arquivo existente!\n";
         return nullptr;
     }
     Formulario* formulario = Formulario::carregar(inFile);
@@ -26,11 +35,11 @@ Formulario* carregarFormulario(const string& nomeArquivo) {
     return formulario;
 }
 
-
+// Função principal
 int main() {
     int opcao;
     do {
-        cout <<"\n";
+        cout << "\n";
         cout << "-------------Menu-------------\n";
         cout << "1. Criar novo formulario\n";
         cout << "2. Responder um formulario\n";
@@ -69,14 +78,14 @@ int main() {
                 getline(cin, texto);
 
                 int numOpcoes;
-                do{
-                cout << "Número de Alternativas(Máximo 5): ";
-                cin >> numOpcoes;
-                cin.ignore();
-                if(numOpcoes>5 || numOpcoes<1){
-                    cout <<"\nERRO: Coloque um número de opção válido!\n\n";
-                }
-                }while(numOpcoes>5 || numOpcoes<1);
+                do {
+                    cout << "Número de Alternativas (Máximo 5): ";
+                    cin >> numOpcoes;
+                    cin.ignore();
+                    if (numOpcoes > 5 || numOpcoes < 1) {
+                        cout << "\nERRO: Coloque um número de opção válido!\n\n";
+                    }
+                } while (numOpcoes > 5 || numOpcoes < 1);
 
                 vector<string> opcoes;
                 for (int j = 0; j < numOpcoes; ++j) {
@@ -95,7 +104,7 @@ int main() {
             for (int i = 0; i < numPerguntasEscala; ++i) {
                 string texto;
                 int min, max;
-                cout <<"\n";
+                cout << "\n";
                 cout << "Digite o texto da " << i + 1 << "ª pergunta de escala: ";
                 getline(cin, texto);
                 do {
@@ -115,8 +124,8 @@ int main() {
             delete formulario;
 
         } else if (opcao == 2) {
-             exibirFormularios();  // Lista os formulários disponíveis
-            int erro = 1;
+            exibirFormularios();
+             int erro = 1;
             do{
             //listarFormularios();  // Exibir formulários disponíveis
             string nome;

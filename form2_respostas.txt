@@ -75,3 +75,10 @@ Resposta: 22
 Pesquisa
 Resposta: 4
 -----------------------------------------
+seu nome?
+Resposta: pPpP
+sua idade?
+Resposta: 22
+Pesquisa
+Resposta: 8
+-----------------------------------------
