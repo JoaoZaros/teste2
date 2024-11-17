@@ -1,0 +1,77 @@
+seu nome?
+Resposta: guilherme
+sua idade?
+Resposta: 18
+Pesquisa
+Resposta: 10
+-----------------------------------------
+seu nome?
+Resposta: gilherme
+sua idade?
+Resposta: 12
+Pesquisa
+Resposta: 3
+-----------------------------------------
+seu nome?
+Resposta: guilherme
+sua idade?
+Resposta: 18
+Pesquisa
+Resposta: 8
+-----------------------------------------
+seu nome?
+Resposta: guilherme
+sua idade?
+Resposta: 22
+Pesquisa
+Resposta: 8
+-----------------------------------------
+seu nome?
+Resposta: guilherme
+sua idade?
+Resposta: 22
+Pesquisa
+Resposta: 8
+-----------------------------------------
+seu nome?
+Resposta: jaja
+sua idade?
+Resposta: 22
+Pesquisa
+Resposta: 5
+-----------------------------------------
+seu nome?
+Resposta: japa
+sua idade?
+Resposta: 15
+Pesquisa
+Resposta: 8
+-----------------------------------------
+seu nome?
+Resposta: japa
+sua idade?
+Resposta: 22
+Pesquisa
+Resposta: 8
+-----------------------------------------
+seu nome?
+Resposta: china
+sua idade?
+Resposta: 18
+Pesquisa
+Resposta: 8
+-----------------------------------------
+seu nome?
+Resposta: pooo
+sua idade?
+Resposta: 18
+Pesquisa
+Resposta: 10
+-----------------------------------------
+seu nome?
+Resposta: kakakaka
+sua idade?
+Resposta: 22
+Pesquisa
+Resposta: 4
+-----------------------------------------
