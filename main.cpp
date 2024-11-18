@@ -7,36 +7,78 @@
 
 using namespace std;
 
+// Função para obter o timestamp atual
+string getTimestamp() {
+    time_t now = time(nullptr);
+    now -= 3 * 3600; 
+    char buf[80];
+    strftime(buf, sizeof(buf), "[%Y-%m-%d %H:%M:%S]", localtime(&now));
+    return string(buf);
+}
+
+// Classe para gerenciar o log
+class Logger {
+private:
+    ofstream logFile;
+
+public:
+    Logger(const string& fileName) {
+        logFile.open(fileName, ios::app); // Abrir em modo de anexação
+        if (!logFile) {
+            cerr << "Erro ao abrir o arquivo de log!" << endl;
+        }
+    }
+
+    ~Logger() {
+        if (logFile.is_open()) {
+            logFile.close();
+        }
+    }
+
+    void log(const string& message) {
+        if (logFile.is_open()) {
+            logFile << getTimestamp() << " " << message << endl;
+        }
+    }
+};
+
 // Função para listar os formulários disponíveis
-void exibirFormularios() {
+void exibirFormularios(Logger& logger) {
     cout << "\nFormularios disponíveis:\n";
+    logger.log("Listando formulários disponíveis.");
     system("ls *.bin");
-    //cout << "\n";
 }
 
 // Função para salvar um formulário
-void salvarFormulario(Formulario* formulario) {
+void salvarFormulario(Formulario* formulario, Logger& logger) {
     ofstream outFile(formulario->getNomeFormulario() + ".bin", ios::binary);
     formulario->salvar(outFile);
     outFile.close();
+    logger.log("Formulario '" + formulario->getNomeFormulario() + "' salvo com sucesso.");
     cout << "Formulario '" << formulario->getNomeFormulario() << "' salvo com sucesso.\n";
 }
 
 // Função para carregar um formulário
-Formulario* carregarFormulario(const string& nomeArquivo) {
+Formulario* carregarFormulario(const string& nomeArquivo, Logger& logger) {
+    logger.log("Tentativa de carregar formulário: " + nomeArquivo);
     ifstream inFile(nomeArquivo + ".bin", ios::binary);
     if (!inFile) {
+        logger.log("Erro: Arquivo não encontrado - " + nomeArquivo);
         cout << "Arquivo não encontrado. Digite um nome de arquivo existente!\n";
         return nullptr;
     }
     Formulario* formulario = Formulario::carregar(inFile);
     inFile.close();
+    logger.log("Formulario carregado: " + nomeArquivo);
     cout << "->Formulario: " << nomeArquivo << "\n";
     return formulario;
 }
 
 // Função principal
 int main() {
+    Logger logger("log_execucao.txt");
+    logger.log("Programa iniciado.");
+
     int opcao;
     do {
         cout << "\n";
@@ -54,6 +96,7 @@ int main() {
             getline(cin, nome);
 
             Formulario* formulario = new Formulario(nome);
+            logger.log("Criando novo formulário: " + nome);
 
             int numPerguntasAbertas, numPerguntasMultipla, numPerguntasEscala;
 
@@ -120,38 +163,39 @@ int main() {
                 formulario->adicionarPergunta(new PerguntaEscala(texto, min, max));
             }
 
-            salvarFormulario(formulario);
+            salvarFormulario(formulario, logger);
             delete formulario;
 
         } else if (opcao == 2) {
-            exibirFormularios();
-             int erro = 1;
-            do{
-            //listarFormularios();  // Exibir formulários disponíveis
-            string nome;
-            cout << "\nDigite o nome do formulario que queira responder (Digite sair para voltar ao menu): ";
-            getline(cin, nome);
-            cout << "\n";
-            int verif = 0;
-            if(nome =="sair"){
-               verif += 1;
-               erro -= 1;
-            }
-            if(verif == 0){
-                Formulario* formulario = carregarFormulario(nome);
-                if (formulario) {
-                    formulario->coletarRespostas();
-                    formulario->salvarRespostas(nome + "_respostas.txt");
-                    delete formulario;
-                    erro -= 1;
+            exibirFormularios(logger);
+            int erro = 1;
+            do {
+                string nome;
+                cout << "\nDigite o nome do formulario que queira responder (Digite sair para voltar ao menu): ";
+                getline(cin, nome);
+                cout << "\n";
+
+                if (nome == "sair") {
+                    erro = 0;
+                    logger.log("Usuário optou por sair da opção de responder formulário.");
+                } else {
+                    Formulario* formulario = carregarFormulario(nome, logger);
+                    if (formulario) {
+                        formulario->coletarRespostas();
+                        formulario->salvarRespostas(nome + "_respostas.txt");
+                        logger.log("Respostas salvas para o formulário: " + nome);
+                        delete formulario;
+                        erro = 0;
+                    }
                 }
-            }
-            }while(erro==1);
+            } while (erro == 1);
         } else if (opcao != 3) {
             cout << "\nERRO: Opcao invalida! Escolha entre 1, 2 ou 3!\n";
+            logger.log("Erro: Opção inválida escolhida.");
         }
 
     } while (opcao != 3);
 
+    logger.log("Programa encerrado.");
     return 0;
 }
